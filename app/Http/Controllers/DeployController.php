@@ -30,11 +30,32 @@ class DeployController extends Controller
 
         // perform a deployment check and create its configuration. Note that
         // this method can throw exceptions
-        $config = $this->createDeploymentConfiguration($deploymentName);
+        $configSet = $this->createDeploymentConfiguration($deploymentName);
 
-        // TODO: Use the SSH facade to perform an SSH connection using
-        // the host and private key config parameters (make sure to set
-        // these with the config() helper and the remote.php values
+        // deploy for each configuration in the collection
+        foreach($configSet as $config) {
+            // create the common deployment commands
+            $commands = createCommonDeploymentCommands(
+                $config->directory,
+                $config->branch
+            );
+
+            // retrieve and add the additional post-deployment commands, if any
+            $additionalCommands = (!empty($config->commandTemplate) ?
+                explode("\n", $config->commandTemplate->commands) : []);
+            if(!empty($additionalCommands)) {
+                foreach($additionalCommands as $command) {
+                    // take whitespace and control characters into account
+                    if(!empty($command)) {
+                        $commands[] = trim($command);
+                    }
+                }
+            }
+
+            // TODO: Use the SSH facade to perform an SSH connection using
+            // the host and private key config parameters (make sure to set
+            // these with the config() helper and the remote.php values
+        }
 
         return $config;
     }
