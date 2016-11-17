@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DeploymentTypesSeeder::class);
         $this->call(RemoteHostsSeeder::class);
         $this->call(DeploymentConfigurationSeeder::class);
+        $this->call(PrivateKeySeeder::class);
     }
 }
