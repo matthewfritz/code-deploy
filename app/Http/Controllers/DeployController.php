@@ -49,9 +49,13 @@ class DeployController extends Controller
      * @throws InvalidRemoteHostException
      */
     private function createDeployment($deploymentName) {
-        $config = DeploymentConfiguration::with('deploymentType', 'remoteHost.privateKey')
-            ->where('deployment_name', $deploymentName)
-            ->get();
+        $config = DeploymentConfiguration::with(
+            'commandTemplate',
+            'deploymentType',
+            'remoteHost.privateKey'
+        )
+        ->where('deployment_name', $deploymentName)
+        ->get();
 
         // if there are no deployment configurations retrieved with the
         // deployment name, throw an exception
