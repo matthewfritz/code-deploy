@@ -33,7 +33,7 @@ class DeployController extends Controller
         $code = 200;
         $messages = [];
         $data = [
-            'deployment_time' => Carbon::now();
+            'deployment_time' => Carbon::now(),
         ];
 
         $deploymentName = $request->input('name');
