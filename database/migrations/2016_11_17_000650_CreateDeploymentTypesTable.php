@@ -14,7 +14,7 @@ class CreateDeploymentTypesTable extends Migration
     public function up()
     {
         Schema::create('deployment_types', function(Blueprint $table) {
-            $table->string('type')->primary();
+            $table->string('name')->primary();
             $table->string('description')->nullable();
             
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

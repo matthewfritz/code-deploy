@@ -73,8 +73,8 @@ class DeployController extends Controller
         });
         if(!$invalid->isEmpty()) {
             throw new InvalidDeploymentTypeException(
-                "Deployment '{$deploymentName}' contains invalid deployment types for the following remote hosts: " .
-                    $invalid->implode('remote_host_name', ', ')
+                "Deployment '{$deploymentName}' contains the following invalid deployment types: " .
+                    $invalid->implode('deployment_type', ', ')
             );
         }
 

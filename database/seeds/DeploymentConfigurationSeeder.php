@@ -16,7 +16,7 @@ class DeploymentConfigurationSeeder extends Seeder
     	$deployments = [
     		[
                 'remote_host_name' => 'meta-web-testing',
-                'deployment_type' => 'github',
+                'deployment_type_name' => 'github',
                 'deployment_name' => 'test-continuous-deployment',
     			'description' => 'Configuration for testing the continuous deployment functionality',
                 'secret' => 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3',

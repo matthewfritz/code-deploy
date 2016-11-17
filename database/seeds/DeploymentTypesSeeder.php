@@ -15,11 +15,11 @@ class DeploymentTypesSeeder extends Seeder
     {
     	$types = [
     		[
-    			'type' => 'github',
+    			'name' => 'github',
     			'description' => 'A deployment from a GitHub repository'
     		],
     		[
-    			'type' => 'git',
+    			'name' => 'git',
     			'description' => 'A deployment from a custom Git server'
     		],
     	];

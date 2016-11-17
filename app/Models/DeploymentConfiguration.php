@@ -10,7 +10,7 @@ class DeploymentConfiguration extends Model
 
     protected $fillable = [
     	'remote_host_name',
-    	'deployment_type',
+    	'deployment_type_name',
     	'deployment_name',
     	'description',
         'command_template_name',
@@ -29,6 +29,6 @@ class DeploymentConfiguration extends Model
     }
 
     public function deploymentType() {
-        return $this->hasOne(DeploymentType::class, 'type', 'deployment_type');
+        return $this->hasOne(DeploymentType::class, 'name', 'deployment_type_name');
     }
 }

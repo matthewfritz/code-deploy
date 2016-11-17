@@ -17,7 +17,7 @@ class CreateDeploymentConfigurationTable extends Migration
             $table->increments('id');
             $table->string('remote_host_name');
             $table->string('deployment_name');
-            $table->string('deployment_type')->default('github');
+            $table->string('deployment_type_name')->default('github');
             $table->string('description')->nullable();
             $table->string('command_template_name')->nullable();
             $table->string('secret')->nullable(); // any secret value passed along to identify the deployment
