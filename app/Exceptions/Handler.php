@@ -6,6 +6,11 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use App\Exceptions\InvalidDeploymentNameException;
+use App\Exceptions\InvalidDeploymentTypeException;
+use App\Exceptions\InvalidPrivateKeyException;
+use App\Exceptions\InvalidRemoteHostException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -44,6 +49,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof InvalidDeploymentNameException) {
+            return sendJsonResponse(false, 404, $exception->getMessage());
+        }
+        else if($exception instanceof InvalidDeploymentTypeException) {
+            return sendJsonResponse(false, 500, $exception->getMessage());
+        }
+        else if($exception instanceof InvalidPrivateKeyException) {
+            return sendJsonResponse(false, 500, $exception->getMessage());
+        }
+        else if($exception instanceof InvalidRemoteHostException) {
+            return sendJsonResponse(false, 500, $exception->getMessage());
+        }
+
         return parent::render($request, $exception);
     }
 
