@@ -23,6 +23,7 @@ class CreateDeploymentLogTable extends Migration
             $table->string('user')->default('metadeploy');
             $table->boolean('success')->default(true); // whether the deployment was successful
             $table->string('message')->nullable(); // will contain an error message if available
+            $table->text('output')->nullable(); // the output of the deployment commands
 
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->nullable(); 

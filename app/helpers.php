@@ -30,8 +30,8 @@ function createCommonDeploymentCommands($repoPath, $branch) {
  */
 function sendJsonResponse($success=true, $responseCode=200, $message="", $data=[]) {
 	return response()->json([
-		'server' => 'META+Lab Code Deploy',
-		'version' => env('APP_VERSION', '1.0'),
+		'server' => config('app.name'),
+		'version' => config('app.version'),
 		'success' => $success ? "true" : "false",
 		'code' => "{$responseCode}",
 		'message' => $message,

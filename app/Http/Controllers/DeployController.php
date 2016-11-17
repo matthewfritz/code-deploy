@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 
 use App\Exceptions\InvalidDeploymentNameException;
@@ -26,6 +28,14 @@ class DeployController extends Controller
      * Performs the deployment to a server.
      */
     public function deploy(Request $request) {
+        // metadata about the deployment
+        $success = true;
+        $code = 200;
+        $messages = [];
+        $data = [
+            'deployment_time' => Carbon::now();
+        ];
+
         $deploymentName = $request->input('name');
 
         // perform a deployment check and create its configuration. Note that
@@ -56,12 +66,37 @@ class DeployController extends Controller
             $this->configureSSH($config);
 
             // connect to the remote host and execute the commands
-            SSH::run($commands, function($line) {
-                echo $line . "<br />";
+            $outputLines = [];
+            SSH::run($commands, function($line) use (&$outputLines) {
+                $outputLines[] = $line;
             });
+            $outputLines[] = "Done.";
+
+            // spit out a success message (temp for now)
+            $message = "Deployment was successful";
+            $messages[] = $message . " (host={$config->remoteHost->host}, dir={$config->directory})";
+            
+            // create a log record of the deployment
+            DeploymentLog::create([
+                'remote_host' => $config->remoteHost->host,
+                'deployment_type' => $config->deployment_type_name,
+                'deployment_name' => $config->deployment_name,
+                'directory' => $config->directory,
+                'branch' => $config->branch,
+                'user' => $config->user,
+                'success' => $success,
+                'message' => $message,
+                'output' => implode("\n", $outputLines);
+            ]);
         }
 
-        echo "Done.";
+        $data['deployment_name'] => $deploymentName;
+        return sendJsonResponse(
+            $success,
+            $code,
+            implode("\n", $messages),
+            $data
+        );
     }
 
     /**

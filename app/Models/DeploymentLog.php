@@ -17,5 +17,6 @@ class DeploymentLog extends Model
     	'user',
     	'success',
     	'message',
+        'output',
     ];
 }
