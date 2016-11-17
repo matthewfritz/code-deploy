@@ -20,7 +20,7 @@ class DeploymentConfigurationSeeder extends Seeder
                 'deployment_name' => 'test-continuous-deployment',
     			'description' => 'Configuration for testing the continuous deployment functionality',
                 'secret' => 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3',
-                'directory' => '/var/www/testing/test-deploy',
+                'directory' => '/var/www/testing/test-deploy/laravel',
                 'branch' => 'master',
                 'user' => 'metadeploy'
     		],
