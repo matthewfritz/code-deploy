@@ -52,6 +52,9 @@ class DeployController extends Controller
                 }
             }
 
+            // configure the SSH connection for the deployment
+            $this->configureSSH($config);
+
             // TODO: Use the SSH facade to perform an SSH connection using
             // the host and private key config parameters (make sure to set
             // these with the config() helper and the remote.php values
@@ -136,5 +139,23 @@ class DeployController extends Controller
 
         // all checks passed, so return the config objects
         return $config;
+    }
+
+    /**
+     * Configures the SSH capabilities using a complete deployment configuration.
+     *
+     * @param DeploymentConfiguration $deploymentConfiguration The configuration to use
+     */
+    private function configureSSH($deploymentConfiguration) {
+        $host = $deploymentConfiguration->remoteHost->host;
+        $user = $deploymentConfiguration->user;
+        $key = $deploymentConfiguration->remoteHost->privateKey->path;
+
+        $dc = config('remote.default');
+        config([
+            "remote.connections.{$dc}.host" => $host,
+            "remote.connections.{$dc}.username" => $user,
+            "remote.connections.{$dc}.key" => $key
+        ]);
     }
 }
