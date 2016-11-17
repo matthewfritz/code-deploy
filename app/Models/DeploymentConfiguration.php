@@ -18,4 +18,8 @@ class DeploymentConfiguration extends Model
     	'branch',
     	'user'
     ];
+
+    public function remoteHost() {
+        return $this->hasOne(RemoteHost::class, 'name', 'remote_host_name');
+    }
 }
