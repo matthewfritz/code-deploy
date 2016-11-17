@@ -19,6 +19,7 @@ class CreateDeploymentLogTable extends Migration
             $table->string('deployment_type')->default('github');
             $table->string('deployment_name');
             $table->string('directory');
+            $table->string('branch')->default('master')->nullable();
             $table->string('user')->default('metadeploy');
 
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

@@ -15,7 +15,7 @@ class CreatePrivateKeyTable extends Migration
     {
         Schema::create('private_keys', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('remote_host_id');
+            $table->string('remote_host_name');
             $table->string('path');
             $table->boolean('active')->default(true);
 

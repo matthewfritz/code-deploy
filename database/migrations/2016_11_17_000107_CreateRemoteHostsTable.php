@@ -14,7 +14,7 @@ class CreateRemoteHostsTable extends Migration
     public function up()
     {
         Schema::create('remote_hosts', function(Blueprint $table) {
-            $table->increments('id');
+            $table->string('name')->primary(); // short name to identify the host
             $table->string('host'); // IP address or FQDN
             $table->string('description')->nullable();
 
