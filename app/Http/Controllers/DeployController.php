@@ -74,7 +74,7 @@ class DeployController extends Controller
         if(!$invalid->isEmpty()) {
             throw new InvalidDeploymentTypeException(
                 "Deployment '{$deploymentName}' contains the following invalid deployment types: " .
-                    $invalid->implode('deployment_type', ', ')
+                    $invalid->implode('deployment_type_name', ', ')
             );
         }
 
