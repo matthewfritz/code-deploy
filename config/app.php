@@ -178,6 +178,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // Remote (SSH) service provider
+        Collective\Remote\RemoteServiceProvider::class,
+
     ],
 
     /*
@@ -226,6 +229,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // SSH
+        'SSH' => Collective\Remote\RemoteFacade::class,
     ],
 
 ];

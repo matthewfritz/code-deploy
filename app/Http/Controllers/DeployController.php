@@ -11,6 +11,8 @@ use App\Models\DeploymentLog;
 use App\Models\PrivateKey;
 use App\Models\RemoteHost;
 
+use SSH;
+
 class DeployController extends Controller
 {
     /**
@@ -22,6 +24,10 @@ class DeployController extends Controller
             ->where('deployment_name', $deploymentName)
             ->firstOrFail();
 
-        return $config;
+        // TODO: Use the SSH facade to perform an SSH connection using
+        // the host and private key config parameters (make sure to set
+        // these with the config() helper and the remote.php values
+
+        //return $config;
     }
 }
