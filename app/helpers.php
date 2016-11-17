@@ -10,6 +10,7 @@
  */
 function createCommonDeploymentCommands($repoPath, $branch) {
 	return [
+		"echo Running as user $(whoami)",
 		"cd {$repoPath}",
 		"git fetch",
 		"git checkout {$branch}",
