@@ -19,6 +19,7 @@ class CreateDeploymentConfigurationTable extends Migration
             $table->string('deployment_name');
             $table->string('deployment_type')->default('github');
             $table->string('description')->nullable();
+            $table->string('command_template_name')->nullable();
             $table->string('secret')->nullable(); // any secret value passed along to identify the deployment
             $table->string('directory'); // absolute path to where the .git directory resides
             $table->string('branch')->default('master')->nullable(); // Git branch to pull

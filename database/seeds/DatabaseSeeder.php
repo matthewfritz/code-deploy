@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+    	$this->call(DeploymentCommandTemplateSeeder::class);
         $this->call(DeploymentTypesSeeder::class);
         $this->call(RemoteHostsSeeder::class);
         $this->call(DeploymentConfigurationSeeder::class);

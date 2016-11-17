@@ -13,6 +13,7 @@ class DeploymentConfiguration extends Model
     	'deployment_type',
     	'deployment_name',
     	'description',
+        'command_template_name',
     	'secret',
     	'directory',
     	'branch',
@@ -21,5 +22,9 @@ class DeploymentConfiguration extends Model
 
     public function remoteHost() {
         return $this->hasOne(RemoteHost::class, 'name', 'remote_host_name');
+    }
+
+    public function commandTemplate() {
+        return $this->hasOne(DeploymentCommandTemplate::class, 'name', 'command_template_name');
     }
 }
