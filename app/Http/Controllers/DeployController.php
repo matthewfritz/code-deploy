@@ -55,12 +55,13 @@ class DeployController extends Controller
             // configure the SSH connection for the deployment
             $this->configureSSH($config);
 
-            // TODO: Use the SSH facade to perform an SSH connection using
-            // the host and private key config parameters (make sure to set
-            // these with the config() helper and the remote.php values
+            // connect to the remote host and execute the commands
+            SSH::run($commands, function($line) {
+                echo $line . "<br />";
+            });
         }
 
-        return $config;
+        echo "Done.";
     }
 
     /**
