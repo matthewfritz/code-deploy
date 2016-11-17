@@ -28,8 +28,9 @@ class DeployController extends Controller
     public function deploy(Request $request) {
         $deploymentName = $request->input('name');
 
-        // perform a deployment check and create it (this can throw exceptions)
-        $config = $this->createDeployment($deploymentName);
+        // perform a deployment check and create its configuration. Note that
+        // this method can throw exceptions
+        $config = $this->createDeploymentConfiguration($deploymentName);
 
         // TODO: Use the SSH facade to perform an SSH connection using
         // the host and private key config parameters (make sure to set
@@ -45,10 +46,11 @@ class DeployController extends Controller
      * @param string $deploymentName The name of the deployment
      *
      * @throws InvalidDeploymentNameException
+     * @throws InvalidDeploymentTypeException
      * @throws InvalidPrivateKeyException
      * @throws InvalidRemoteHostException
      */
-    private function createDeployment($deploymentName) {
+    private function createDeploymentConfiguration($deploymentName) {
         $config = DeploymentConfiguration::with(
             'commandTemplate',
             'deploymentType',
