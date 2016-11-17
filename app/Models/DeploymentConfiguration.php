@@ -27,4 +27,8 @@ class DeploymentConfiguration extends Model
     public function commandTemplate() {
         return $this->hasOne(DeploymentCommandTemplate::class, 'name', 'command_template_name');
     }
+
+    public function deploymentType() {
+        return $this->hasOne(DeploymentType::class, 'type', 'deployment_type');
+    }
 }

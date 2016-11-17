@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Exceptions\InvalidDeploymentNameException;
+use App\Exceptions\InvalidDeploymentTypeException;
 use App\Exceptions\InvalidPrivateKeyException;
 use App\Exceptions\InvalidRemoteHostException;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\DeploymentCommandTemplate;
 use App\Models\DeploymentConfiguration;
 use App\Models\DeploymentLog;
+use App\Models\DeploymentType;
 use App\Models\PrivateKey;
 use App\Models\RemoteHost;
 
@@ -46,7 +49,7 @@ class DeployController extends Controller
      * @throws InvalidRemoteHostException
      */
     private function createDeployment($deploymentName) {
-        $config = DeploymentConfiguration::with('remoteHost.privateKey')
+        $config = DeploymentConfiguration::with('deploymentType', 'remoteHost.privateKey')
             ->where('deployment_name', $deploymentName)
             ->get();
 
@@ -55,6 +58,17 @@ class DeployController extends Controller
         if($config->isEmpty()) {
             throw new InvalidDeploymentNameException(
                 "'{$deploymentName}' is an invalid deployment name"
+            );
+        }
+
+        // if there is an invalid deployment type anywhere, throw an exception
+        $invalid = $config->filter(function($conf) {
+            return is_null($conf->deploymentType);
+        });
+        if(!$invalid->isEmpty()) {
+            throw new InvalidDeploymentTypeException(
+                "Deployment '{$deploymentName}' contains invalid deployment types for the following remote hosts: " .
+                    $invalid->implode('remote_host_name', ', ')
             );
         }
 
