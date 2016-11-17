@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'production',
+    'default' => 'deploy',
 
     /*
     |--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ return [
     */
 
     'connections' => [
-        'production' => [
+        'deploy' => [
             'host'      => '',
             'username'  => '',
             'password'  => '',
@@ -51,7 +51,7 @@ return [
     */
 
     'groups' => [
-        'web' => ['production'],
+        'web' => ['deploy'],
     ],
 
 ];

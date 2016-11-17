@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Exceptions\InvalidDeploymentNameException;
+use App\Exceptions\InvalidPrivateKeyException;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\DeploymentConfiguration;
@@ -22,7 +25,15 @@ class DeployController extends Controller
         $deploymentName = $request->input('name');
         $config = DeploymentConfiguration::with('remoteHost.privateKey')
             ->where('deployment_name', $deploymentName)
-            ->firstOrFail();
+            ->get();
+
+        // if there are no deployment configurations retrieved with the
+        // deployment name, error out
+        if($config->isEmpty()) {
+            throw new InvalidDeploymentNameException(
+                "{$deploymentName} is an invalid deployment name"
+            );
+        }
 
         // TODO: Throw errors if there is an invalid remote host or there
         // is an invalid private key

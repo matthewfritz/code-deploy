@@ -16,7 +16,7 @@ class RemoteHostsSeeder extends Seeder
     	$hosts = [
     		[
                 'name' => 'meta-web-testing',
-    			'host' => '130.166.38.206',
+    			'host' => '130.166.38.211',
     			'description' => 'META+Lab Web-Testing virtual machine'
     		],
     		[
