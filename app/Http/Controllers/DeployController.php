@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Exceptions\InvalidDeploymentNameException;
 use App\Exceptions\InvalidPrivateKeyException;
+use App\Exceptions\InvalidRemoteHostException;
 
 use App\Http\Controllers\Controller;
 
@@ -31,7 +32,7 @@ class DeployController extends Controller
         // the host and private key config parameters (make sure to set
         // these with the config() helper and the remote.php values
 
-        //return $config;
+        return $config;
     }
 
     /**
@@ -53,35 +54,42 @@ class DeployController extends Controller
         // deployment name, throw an exception
         if($config->isEmpty()) {
             throw new InvalidDeploymentNameException(
-                "{$deploymentName} is an invalid deployment name"
+                "'{$deploymentName}' is an invalid deployment name"
             );
         }
 
         // if there is an invalid remote host anywhere, throw an exception
         $invalid = $config->filter(function($conf) {
-            return is_null($conf->remote_host);
+            return is_null($conf->remoteHost);
         });
         if(!$invalid->isEmpty()) {
             throw new InvalidRemoteHostException(
-                "{$deploymentName} contains the following invalid remote hosts: " .
-                    $invalid->implode('remote_host_name', ', ');
+                "Deployment '{$deploymentName}' contains the following invalid remote hosts: " .
+                    $invalid->implode('remote_host_name', ', ')
             );
         }
 
-        // if there is an invalid private key anywhere, throw an exception
+        // if there is an invalid private key anywhere (no private key), throw an exception
         $invalid = $config->filter(function($conf) {
-            if(is_null($conf->remote_host->privateKey)) {
-                return true;
-            }
-            return (!file_exists($conf->remote_host->private_key->path) ||
-                !is_readable($conf->remote_host->private_key->path));
+            return is_null($conf->remoteHost->privateKey);
         });
-
         if(!$invalid->isEmpty()) {
-            throw new InvalidRemoteHostException(
-                "{$deploymentName} contains invalid private keys for the following remote hosts: " .
+            throw new InvalidPrivateKeyException(
+                "Deployment '{$deploymentName}' contains no private key for the following remote hosts: " .
+                    $invalid->implode('remote_host_name', ', ')
+            );
+        }
+
+        // if there is an invalid private key anywhere (non-readable), throw an exception
+        $invalid = $config->filter(function($conf) {
+            return (!file_exists($conf->remoteHost->privateKey->path) ||
+                !is_readable($conf->remoteHost->privateKey->path));
+        });
+        if(!$invalid->isEmpty()) {
+            throw new InvalidPrivateKeyException(
+                "Deployment '{$deploymentName}' contains invalid private keys for the following remote hosts: " .
                     $invalid->implode('remote_host_name', ', ') .
-                ". Check that the keys exist and are readable by the web server.";
+                ". Check that the keys exist and are readable by the web server."
             );
         }
 
