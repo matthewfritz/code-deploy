@@ -24,6 +24,9 @@ class DeployController extends Controller
             ->where('deployment_name', $deploymentName)
             ->firstOrFail();
 
+        // TODO: Throw errors if there is an invalid remote host or there
+        // is an invalid private key
+
         // TODO: Use the SSH facade to perform an SSH connection using
         // the host and private key config parameters (make sure to set
         // these with the config() helper and the remote.php values
