@@ -33,7 +33,8 @@ class DeployController extends Controller
         $code = 200;
         $messages = [];
         $data = [
-            'deployment_time' => Carbon::now(),
+            'deployment_time' =>
+                Carbon::now(config('app.timezone'))->toDateTimeString(),
         ];
 
         $deploymentName = $request->input('name');
