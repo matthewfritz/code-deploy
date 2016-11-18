@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 use App\Exceptions\InvalidDeploymentNameException;
+use App\Exceptions\InvalidDeploymentSecretException;
 use App\Exceptions\InvalidDeploymentTypeException;
 use App\Exceptions\InvalidPrivateKeyException;
 use App\Exceptions\InvalidRemoteHostException;
@@ -51,6 +52,9 @@ class Handler extends ExceptionHandler
     {
         if($exception instanceof InvalidDeploymentNameException) {
             return sendJsonResponse(false, 404, $exception->getMessage());
+        }
+        else if($exception instanceof InvalidDeploymentSecretException) {
+            return sendJsonResponse(false, 400, $exception->getMessage());
         }
         else if($exception instanceof InvalidDeploymentTypeException) {
             return sendJsonResponse(false, 500, $exception->getMessage());

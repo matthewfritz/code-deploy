@@ -29,6 +29,7 @@ class DeployController extends Controller
      */
     public function deploy(Request $request) {
         $deploymentName = $request->input('name');
+        $deploymentSecret = $request->input('secret');
 
         // metadata about the deployment
         $success = true;
@@ -42,7 +43,10 @@ class DeployController extends Controller
 
         // perform a deployment check and create its configuration. Note that
         // this method can throw exceptions
-        $configSet = $this->createDeploymentConfiguration($deploymentName);
+        $configSet = $this->createDeploymentConfiguration(
+            $deploymentName,
+            $deploymentSecret
+        );
 
         // deploy for each configuration in the collection
         foreach($configSet as $config) {
@@ -105,13 +109,15 @@ class DeployController extends Controller
      * objects on a valid configuration or throws an exception.
      *
      * @param string $deploymentName The name of the deployment
+     * @param string $deploymentSecret Optional secret value from the request
      *
      * @throws InvalidDeploymentNameException
      * @throws InvalidDeploymentTypeException
      * @throws InvalidPrivateKeyException
      * @throws InvalidRemoteHostException
      */
-    private function createDeploymentConfiguration($deploymentName) {
+    private function createDeploymentConfiguration($deploymentName,
+        $deploymentSecret=NULL) {
         $config = DeploymentConfiguration::with(
             'commandTemplate',
             'deploymentType',
@@ -138,6 +144,9 @@ class DeployController extends Controller
                     $invalid->implode('deployment_type_name', ', ')
             );
         }
+
+        // check the secret value for validity
+        $this->checkDeploymentSecret($config, $deploymentSecret);
 
         // if there is an invalid remote host anywhere, throw an exception
         $invalid = $config->filter(function($conf) {
@@ -176,6 +185,54 @@ class DeployController extends Controller
 
         // all checks passed, so return the config objects
         return $config;
+    }
+
+    /**
+     * Checks the validity of the secret for the configuration set. Throws an
+     * exception if the secret cannot be verified.
+     *
+     * @param Collection:DeploymentConfiguration $config Set of deployment configuration
+     * @param string $secret The secret to validate
+     *
+     * @throws InvalidDeploymentSecretException
+     */
+    private function checkDeploymentSecret($config, $secret) {
+        // retrieve all configurations with a secret value
+        $configs = $config->filter(function($c) {
+            return !empty($c->secret);
+        });
+        if(!$configs->isEmpty()) {
+            // there are configurations with secrets so we need to perform validity
+            // checks. GitHub works differently with its secret values than a custom
+            // git server would so we need to take that into account.
+            $invalid = $configs->filter(function($c) use ($secret) {
+                if($c->deployment_type_name == "github") {
+                    // retrieve the secret header and strip off the sha1= portion
+                    $hSecret = header('X-Hub-Signature');
+                    $hSecret = trim(str_replace('sha1=', '', $hSecret));
+
+                    // check whether the sha1 version of the secret in the deployment
+                    // configuration is different the value in the header and is
+                    // therefore invalid
+                    return sha1(trim($c->secret)) != $hSecret;
+                }
+                else
+                {
+                    // custom Git server so it's a simple check for whether the
+                    // secret is invalid
+                    return trim($c->secret) != trim($secret);
+                }
+            });
+
+            // if there are any configurations in the collection, let's throw the
+            // exeception
+            if(!$invalid->empty()) {
+                throw new InvalidDeploymentSecretException(
+                    "Deployment '{$deploymentName}' has different secrets for the following remote hosts: " .
+                        $invalid->implode('remote_host_name', ', ')
+                );
+            }
+        }
     }
 
     /**
