@@ -90,7 +90,7 @@ class DeployController extends Controller
             ]);
         }
 
-        $data['deployment_name'] => $deploymentName;
+        $data['deployment_name'] = $deploymentName;
         return sendJsonResponse(
             $success,
             $code,
