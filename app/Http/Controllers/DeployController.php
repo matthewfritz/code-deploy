@@ -230,7 +230,7 @@ class DeployController extends Controller
                     // if the HMAC digest of the request from GitHub is different than the
                     // the calculated digest below, the secrets do not match
                     $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret));
-                    return hash_equals($calculated, $hValue);
+                    return !hash_equals($calculated, $hValue);
                 }
                 else
                 {
@@ -240,8 +240,8 @@ class DeployController extends Controller
                 }
             });
 
-            // if there are any configurations in the collection, let's throw the
-            // exeception
+            // if there are any configurations still in the collection, let's throw
+            // the exeception
             if(!$invalid->isEmpty()) {
                 throw new InvalidDeploymentSecretException(
                     "Deployment '{$deploymentName}' has different secrets for the following remote hosts: " .
