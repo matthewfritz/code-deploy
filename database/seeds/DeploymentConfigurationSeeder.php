@@ -25,6 +25,17 @@ class DeploymentConfigurationSeeder extends Seeder
                 'user' => 'metadeploy',
                 'group' => 'www-data',
     		],
+            [
+                'remote_host_name' => 'meta-cdn',
+                'deployment_type_name' => 'github',
+                'deployment_name' => 'deploy-metaphor',
+                'description' => 'Configuration to deploy Metaphor to the CDN',
+                'secret' => 'b231b8df0a22d518f393c4048f67aaefd7f6c77a',
+                'directory' => '/var/www/repos/metaphor',
+                'branch' => 'master',
+                'user' => 'metadeploy',
+                'group' => 'www-data',
+            ],
     	];
 
     	foreach($deployments as $deployment) {
