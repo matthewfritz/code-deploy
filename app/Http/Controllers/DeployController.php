@@ -229,8 +229,10 @@ class DeployController extends Controller
 
                     // if the HMAC digest of the request from GitHub is different than the
                     // the calculated digest below, the secrets do not match
-                    return hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret))
-                        != $hValue;
+                    return hash_equals(
+                        hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret)),
+                        $hValue
+                    );
                 }
                 else
                 {
