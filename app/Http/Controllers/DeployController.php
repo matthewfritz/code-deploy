@@ -45,6 +45,7 @@ class DeployController extends Controller
         // perform a deployment check and create its configuration. Note that
         // this method can throw exceptions
         $configSet = $this->createDeploymentConfiguration(
+            $request,
             $deploymentName,
             $deploymentSecret
         );
@@ -109,6 +110,7 @@ class DeployController extends Controller
      * Performs a deployment validity check. Returns the Collection of configuration
      * objects on a valid configuration or throws an exception.
      *
+     * @param Request $request The contents of the request for deployment
      * @param string $deploymentName The name of the deployment
      * @param string $deploymentSecret Optional secret value from the request
      *
@@ -117,7 +119,9 @@ class DeployController extends Controller
      * @throws InvalidPrivateKeyException
      * @throws InvalidRemoteHostException
      */
-    private function createDeploymentConfiguration($deploymentName,
+    private function createDeploymentConfiguration(
+        Request $request,
+        $deploymentName,
         $deploymentSecret=NULL) {
         $config = DeploymentConfiguration::with(
             'commandTemplate',
@@ -148,6 +152,7 @@ class DeployController extends Controller
 
         // check the secret value for validity
         $this->checkDeploymentSecret(
+            $request,
             $deploymentName,
             $config,
             $deploymentSecret
@@ -196,13 +201,17 @@ class DeployController extends Controller
      * Checks the validity of the secret for the configuration set. Throws an
      * exception if the secret cannot be verified.
      *
+     * @param Request $request The contents of the request for deployment
      * @param string $deploymentName The name of the deployment
      * @param Collection:DeploymentConfiguration $config Set of deployment configuration
      * @param string $secret The secret to validate
      *
      * @throws InvalidDeploymentSecretException
      */
-    private function checkDeploymentSecret($deploymentName, $config, $secret) {
+    private function checkDeploymentSecret(Request $request,
+        $deploymentName,
+        $config,
+        $secret) {
         // retrieve all configurations with a secret value
         $configs = $config->filter(function($c) {
             return !empty($c->secret);
@@ -217,10 +226,11 @@ class DeployController extends Controller
                     $hSecret = header('X-Hub-Signature');
                     $hSecret = trim(str_replace('sha1=', '', $hSecret));
 
-                    // check whether the sha1 version of the secret in the deployment
+                    // check whether the hmac-sha1 version of the secret in the deployment
                     // configuration is different the value in the header and is
                     // therefore invalid
-                    return sha1(trim($c->secret)) != $hSecret;
+                    return hash_hmac('sha1', $request->getContent(), trim($c->secret))
+                        != $hSecret;
                 }
                 else
                 {
