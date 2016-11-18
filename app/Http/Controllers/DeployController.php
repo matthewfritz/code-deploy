@@ -55,7 +55,8 @@ class DeployController extends Controller
             // create the common deployment commands
             $commands = createCommonDeploymentCommands(
                 $config->directory,
-                $config->branch
+                $config->branch,
+                $config->group
             );
 
             // retrieve and add the additional post-deployment commands, if any
@@ -91,6 +92,7 @@ class DeployController extends Controller
                 'directory' => $config->directory,
                 'branch' => $config->branch,
                 'user' => $config->user,
+                'group' => $config->group,
                 'success' => $success,
                 'message' => $message,
                 'output' => implode("\n", $outputLines),

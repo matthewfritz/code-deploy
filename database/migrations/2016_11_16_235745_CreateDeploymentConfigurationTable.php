@@ -24,6 +24,7 @@ class CreateDeploymentConfigurationTable extends Migration
             $table->string('directory'); // absolute path to where the .git directory resides
             $table->string('branch')->default('master')->nullable(); // Git branch to pull
             $table->string('user')->default('metadeploy'); // user account on the remote host that will deploy
+            $table->string('group')->default('www-data'); // group account on the remote host that will deploy
 
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->nullable(); 

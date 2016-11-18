@@ -8,13 +8,18 @@
  *
  * @return array
  */
-function createCommonDeploymentCommands($repoPath, $branch) {
+function createCommonDeploymentCommands(
+	$repoPath,
+	$branch,
+	$user,
+	$group) {
 	return [
 		"echo Running as user $(whoami)",
 		"cd {$repoPath}",
 		"git fetch",
 		"git checkout {$branch}",
-		"git pull"
+		"git pull",
+		"chown -hR {$user}:{$group} {$repoPath}"
 	];
 }
 

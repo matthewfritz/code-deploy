@@ -17,7 +17,8 @@ class DeploymentConfiguration extends Model
     	'secret',
     	'directory',
     	'branch',
-    	'user'
+    	'user',
+        'group',
     ];
 
     public function remoteHost() {

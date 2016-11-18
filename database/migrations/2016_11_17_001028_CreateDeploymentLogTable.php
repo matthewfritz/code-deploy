@@ -21,6 +21,7 @@ class CreateDeploymentLogTable extends Migration
             $table->string('directory');
             $table->string('branch')->default('master')->nullable();
             $table->string('user')->default('metadeploy');
+            $table->string('group')->default('www-data');
             $table->boolean('success')->default(true); // whether the deployment was successful
             $table->string('message')->nullable(); // will contain an error message if available
             $table->text('output')->nullable(); // the output of the deployment commands

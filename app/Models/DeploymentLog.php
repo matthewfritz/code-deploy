@@ -15,6 +15,7 @@ class DeploymentLog extends Model
     	'directory',
     	'branch',
     	'user',
+        'group',
     	'success',
     	'message',
         'output',
