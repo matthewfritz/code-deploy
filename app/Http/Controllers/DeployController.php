@@ -226,7 +226,7 @@ class DeployController extends Controller
 
             // if there are any configurations in the collection, let's throw the
             // exeception
-            if(!$invalid->empty()) {
+            if(!$invalid->isEmpty()) {
                 throw new InvalidDeploymentSecretException(
                     "Deployment '{$deploymentName}' has different secrets for the following remote hosts: " .
                         $invalid->implode('remote_host_name', ', ')
