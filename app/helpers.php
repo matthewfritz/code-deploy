@@ -36,5 +36,5 @@ function sendJsonResponse($success=true, $responseCode=200, $message="", $data=[
 		'code' => "{$responseCode}",
 		'message' => $message,
 		'data' => $data
-	]);
+	], $responseCode);
 }

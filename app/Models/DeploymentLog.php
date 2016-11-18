@@ -19,4 +19,15 @@ class DeploymentLog extends Model
     	'message',
         'output',
     ];
+
+    protected $appends = ['output_lines'];
+
+    /**
+     * Property to retrieve the output lines as an array.
+     *
+     * @return array
+     */
+    public function getOutputLinesAttribute() {
+        return explode("\n", $this->output);
+    }
 }

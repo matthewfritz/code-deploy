@@ -70,7 +70,7 @@ class DeployController extends Controller
             // connect to the remote host and execute the commands
             $outputLines = [];
             SSH::run($commands, function($line) use (&$outputLines) {
-                $outputLines[] = $line;
+                $outputLines[] = trim($line);
             });
             $outputLines[] = "Done.";
 
