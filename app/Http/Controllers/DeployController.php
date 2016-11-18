@@ -86,7 +86,7 @@ class DeployController extends Controller
                 'user' => $config->user,
                 'success' => $success,
                 'message' => $message,
-                'output' => implode("\n", $outputLines);
+                'output' => implode("\n", $outputLines),
             ]);
         }
 
