@@ -223,14 +223,14 @@ class DeployController extends Controller
             $invalid = $configs->filter(function($c) use ($secret, $request) {
                 if($c->deployment_type_name == "github") {
                     // retrieve the secret header and strip off the sha1= portion
-                    $hSecret = header('X-Hub-Signature');
-                    $hSecret = trim(str_replace('sha1=', '', $hSecret));
+                    $secretParts = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE']);
+                    $hAlgorithm = $secretParts[0];
+                    $hValue = $secretParts[1];
 
-                    // check whether the hmac-sha1 version of the secret in the deployment
-                    // configuration is different the value in the header and is
-                    // therefore invalid
-                    return hash_hmac('sha1', $request->getContent(), trim($c->secret))
-                        != $hSecret;
+                    // if the HMAC digest of the request from GitHub is different than the
+                    // the calculated digest below, the secrets do not match
+                    return hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret))
+                        != $hValue;
                 }
                 else
                 {
