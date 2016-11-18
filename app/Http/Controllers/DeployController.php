@@ -220,7 +220,7 @@ class DeployController extends Controller
             // there are configurations with secrets so we need to perform validity
             // checks. GitHub works differently with its secret values than a custom
             // git server would so we need to take that into account.
-            $invalid = $configs->filter(function($c) use ($secret) {
+            $invalid = $configs->filter(function($c) use ($secret, $request) {
                 if($c->deployment_type_name == "github") {
                     // retrieve the secret header and strip off the sha1= portion
                     $hSecret = header('X-Hub-Signature');
