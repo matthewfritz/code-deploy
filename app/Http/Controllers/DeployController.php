@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Exceptions\InvalidDeploymentNameException;
+use App\Exceptions\InvalidDeploymentSecretException;
 use App\Exceptions\InvalidDeploymentTypeException;
 use App\Exceptions\InvalidPrivateKeyException;
 use App\Exceptions\InvalidRemoteHostException;
