@@ -5,6 +5,8 @@
  *
  * @param string $repoPath The absolute path to the .git directory
  * @param string $branch The name of the branch to deploy
+ * @param string $user The user that will own the contents of the directory
+ * @param string $group The group that will own the contents of the directory
  *
  * @return array
  */

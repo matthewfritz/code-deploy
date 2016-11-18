@@ -56,6 +56,7 @@ class DeployController extends Controller
             $commands = createCommonDeploymentCommands(
                 $config->directory,
                 $config->branch,
+                $config->user,
                 $config->group
             );
 
