@@ -147,7 +147,11 @@ class DeployController extends Controller
         }
 
         // check the secret value for validity
-        $this->checkDeploymentSecret($config, $deploymentSecret);
+        $this->checkDeploymentSecret(
+            $deploymentName,
+            $config,
+            $deploymentSecret
+        );
 
         // if there is an invalid remote host anywhere, throw an exception
         $invalid = $config->filter(function($conf) {
@@ -192,12 +196,13 @@ class DeployController extends Controller
      * Checks the validity of the secret for the configuration set. Throws an
      * exception if the secret cannot be verified.
      *
+     * @param string $deploymentName The name of the deployment
      * @param Collection:DeploymentConfiguration $config Set of deployment configuration
      * @param string $secret The secret to validate
      *
      * @throws InvalidDeploymentSecretException
      */
-    private function checkDeploymentSecret($config, $secret) {
+    private function checkDeploymentSecret($deploymentName, $config, $secret) {
         // retrieve all configurations with a secret value
         $configs = $config->filter(function($c) {
             return !empty($c->secret);
