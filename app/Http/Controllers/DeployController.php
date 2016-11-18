@@ -28,16 +28,17 @@ class DeployController extends Controller
      * Performs the deployment to a server.
      */
     public function deploy(Request $request) {
+        $deploymentName = $request->input('name');
+
         // metadata about the deployment
         $success = true;
         $code = 200;
-        $messages = [];
         $data = [
+            'deployment_name' => $deploymentName,
             'deployment_time' =>
                 Carbon::now(config('app.timezone'))->toDateTimeString(),
+            'results' => []
         ];
-
-        $deploymentName = $request->input('name');
 
         // perform a deployment check and create its configuration. Note that
         // this method can throw exceptions
@@ -73,12 +74,11 @@ class DeployController extends Controller
             });
             $outputLines[] = "Done.";
 
-            // spit out a success message (temp for now)
-            $message = "Deployment was successful";
-            $messages[] = $message . " (host={$config->remoteHost->host}, dir={$config->directory})";
+            // generate some metadata about the deployment
+            $message = "Deployment complete";
             
             // create a log record of the deployment
-            DeploymentLog::create([
+            $log = DeploymentLog::create([
                 'remote_host' => $config->remoteHost->host,
                 'deployment_type' => $config->deployment_type_name,
                 'deployment_name' => $config->deployment_name,
@@ -89,13 +89,13 @@ class DeployController extends Controller
                 'message' => $message,
                 'output' => implode("\n", $outputLines),
             ]);
+            $data['results'][] = $log;
         }
 
-        $data['deployment_name'] = $deploymentName;
         return sendJsonResponse(
             $success,
             $code,
-            implode("\n", $messages),
+            "Deployment complete",
             $data
         );
     }
