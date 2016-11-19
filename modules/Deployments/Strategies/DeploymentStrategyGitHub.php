@@ -7,5 +7,7 @@ use Deployments\Models\DeploymentConfiguration;
 
 class DeploymentStrategyGitHub implements DeploymentStrategyInterface
 {
-	public function deploy(DeploymentConfiguration $config);
+	public function deploy(DeploymentConfiguration $config) {
+		
+	}
 }
