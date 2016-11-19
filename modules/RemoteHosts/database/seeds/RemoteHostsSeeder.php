@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\RemoteHost;
+use RemoteHosts\Models\RemoteHost;
 
 class RemoteHostsSeeder extends Seeder
 {

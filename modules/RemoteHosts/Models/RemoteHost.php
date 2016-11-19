@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace RemoteHosts\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use PrivateKeys\Models\PrivateKey;
 
 class RemoteHost extends Model
 {

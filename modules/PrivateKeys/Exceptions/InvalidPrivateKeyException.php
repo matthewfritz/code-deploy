@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace PrivateKeys\Exceptions;
 
 use Exception;
 

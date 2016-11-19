@@ -6,11 +6,11 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-use App\Exceptions\InvalidDeploymentNameException;
-use App\Exceptions\InvalidDeploymentSecretException;
-use App\Exceptions\InvalidDeploymentTypeException;
-use App\Exceptions\InvalidPrivateKeyException;
-use App\Exceptions\InvalidRemoteHostException;
+use Deployments\Exceptions\InvalidDeploymentNameException;
+use Deployments\Exceptions\InvalidDeploymentSecretException;
+use Deployments\Exceptions\InvalidDeploymentTypeException;
+use PrivateKeys\Exceptions\InvalidPrivateKeyException;
+use RemoteHosts\Exceptions\InvalidRemoteHostException;
 
 class Handler extends ExceptionHandler
 {

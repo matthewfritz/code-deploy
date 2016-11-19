@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\DeploymentType;
+use Deployments\Models\DeploymentType;
 
 class DeploymentTypesSeeder extends Seeder
 {

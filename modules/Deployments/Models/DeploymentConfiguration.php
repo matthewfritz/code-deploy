@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace Deployments\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use Deployments\Models\DeploymentCommandTemplate;
+use Deployments\Models\DeploymentType;
+
+use RemoteHosts\Models\RemoteHost;
 
 class DeploymentConfiguration extends Model
 {

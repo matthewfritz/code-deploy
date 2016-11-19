@@ -1,29 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Deployments\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
-use App\Exceptions\InvalidDeploymentNameException;
-use App\Exceptions\InvalidDeploymentSecretException;
-use App\Exceptions\InvalidDeploymentTypeException;
-use App\Exceptions\InvalidPrivateKeyException;
-use App\Exceptions\InvalidRemoteHostException;
+use Deployments\Exceptions\InvalidDeploymentNameException;
+use Deployments\Exceptions\InvalidDeploymentSecretException;
+use Deployments\Exceptions\InvalidDeploymentTypeException;
+use Deployments\Models\DeploymentCommandTemplate;
+use Deployments\Models\DeploymentConfiguration;
+use Deployments\Models\DeploymentLog;
+use Deployments\Models\DeploymentType;
 
-use App\Http\Controllers\Controller;
+use PrivateKeys\Exceptions\InvalidPrivateKeyException;
+use PrivateKeys\Models\PrivateKey;
 
-use App\Models\DeploymentCommandTemplate;
-use App\Models\DeploymentConfiguration;
-use App\Models\DeploymentLog;
-use App\Models\DeploymentType;
-use App\Models\PrivateKey;
-use App\Models\RemoteHost;
+use RemoteHosts\Exceptions\InvalidRemoteHostException;
+use RemoteHosts\Models\RemoteHost;
 
 use SSH;
 
-class DeployController extends Controller
+class DeploymentController extends Controller
 {
     /**
      * Performs the deployment to a server.

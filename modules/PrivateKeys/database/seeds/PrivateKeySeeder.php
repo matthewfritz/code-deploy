@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\PrivateKey;
+use PrivateKeys\Models\PrivateKey;
 
 class PrivateKeySeeder extends Seeder
 {

@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/deploy', 'DeployController@deploy');
+require_once(base_path('./modules/Deployments/Http/routes/web.php'));
