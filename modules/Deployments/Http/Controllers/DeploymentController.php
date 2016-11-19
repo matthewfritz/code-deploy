@@ -16,7 +16,7 @@ use Deployments\Models\DeploymentConfiguration;
 use Deployments\Models\DeploymentLog;
 use Deployments\Models\DeploymentType;
 
-use PrivateKeys\Exceptions\InvalidPrivateKeyException;
+use PrivateKeys\Exceptions\invalidPrivateKeyException;
 use PrivateKeys\Models\PrivateKey;
 
 use RemoteHosts\Exceptions\InvalidRemoteHostException;
