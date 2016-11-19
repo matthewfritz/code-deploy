@@ -9,6 +9,7 @@ class DeploymentLog extends Model
     protected $table = 'deployment_log';
 
     protected $fillable = [
+        'remote_host_name',
     	'remote_host',
     	'deployment_type',
     	'deployment_name',
