@@ -22,7 +22,12 @@
             "app/Models"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Deployments\\": "modules/Deployments/",
+            "Integrations\\": "modules/Integrations/",
+            "PrivateKeys\\": "modules/PrivateKeys/",
+            "RemoteHosts\\": "modules/RemoteHosts/",
+            "Laraway\\": "workbench/Laraway/src/"
         },
         "files": [
             "app/helpers.php"

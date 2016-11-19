@@ -191,6 +191,15 @@ return [
         // Remote (SSH) service provider
         Collective\Remote\RemoteServiceProvider::class,
 
+        // Workbench service providers
+        Laraway\Providers\LarawayServiceProvider::class,
+
+        // Built-in module service providers
+        Deployments\Providers\DeploymentServiceProvider::class,
+        Integrations\Providers\IntegrationServiceProvider::class,
+        PrivateKeys\Providers\PrivateKeyServiceProvider::class,
+        RemoteHosts\Providers\RemoteHostServiceProvider::class,
+
     ],
 
     /*
