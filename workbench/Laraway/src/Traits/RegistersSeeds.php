@@ -10,7 +10,7 @@ trait RegistersSeeds
     private function registerSeeds($dir)
     {
         $this->publishes([
-            $dir.'/database/seeds' => base_path('database/seeds'),
+            $dir.'/../database/seeds' => base_path('../database/seeds'),
         ]);
     }
 }

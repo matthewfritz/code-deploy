@@ -10,7 +10,7 @@ trait RegistersMigrations
     private function registerMigrations($dir)
     {
         $this->publishes([
-            $dir.'/database/migrations' => base_path('database/migrations'),
+            $dir.'/../database/migrations' => base_path('../database/migrations'),
         ]);
     }
 }
