@@ -15,6 +15,7 @@ class CreateDeploymentLogTable extends Migration
     {
         Schema::create('deployment_log', function(Blueprint $table) {
             $table->increments('id');
+            $table->string('remote_host_name'); // name of the remote host
             $table->string('remote_host'); // not a FK because we want to know if hosts change
             $table->string('deployment_type')->default('github');
             $table->string('deployment_name');

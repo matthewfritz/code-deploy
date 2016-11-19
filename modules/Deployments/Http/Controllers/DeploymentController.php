@@ -88,6 +88,7 @@ class DeploymentController extends Controller
             
             // create a log record of the deployment
             $log = DeploymentLog::create([
+                'remote_host_name' => $config->remoteHost->name,
                 'remote_host' => $config->remoteHost->host,
                 'deployment_type' => $config->deployment_type_name,
                 'deployment_name' => $config->deployment_name,
