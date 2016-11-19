@@ -1,3 +1,3 @@
 <?php
 
-Route::post('/deploy', 'DeploymentController@deploy');
+Route::post('/deploy', '\Deployments\Http\Controllers\DeploymentController@deploy');
