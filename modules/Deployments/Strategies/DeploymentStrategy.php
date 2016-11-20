@@ -34,6 +34,33 @@ abstract class DeploymentStrategy
      }
 
      /**
+      * Configures and executes the commands before a deployment.
+      *
+      * @param DeploymentConfiguration $config The configuration to use
+      */
+     protected function configure(DeploymentConfiguration $config) {
+          $this->configureSSH($config);
+     }
+
+     /**
+     * Configures the SSH capabilities using a complete deployment configuration.
+     *
+     * @param DeploymentConfiguration $config The configuration to use
+     */
+    protected function configureSSH(DeploymentConfiguration $config) {
+        $host = $config->remoteHost->host;
+        $user = $config->user;
+        $key = $config->remoteHost->privateKey->path;
+
+        $dc = config('remote.default');
+        config([
+            "remote.connections.{$dc}.host" => $host,
+            "remote.connections.{$dc}.username" => $user,
+            "remote.connections.{$dc}.key" => $key
+        ]);
+    }
+
+     /**
       * Returns the array containing the server commands for this deployment.
       *
       * @return array
@@ -51,16 +78,34 @@ abstract class DeploymentStrategy
           return $this->outputLines;
      }
 
-	/**
+     /**
+      * Executes necessary commands after the deployment.
+      *
+      * @param DeploymentConfiguration $config The configuration to use
+      */
+     protected abstract function after(DeploymentConfiguration $config);
+
+     /**
+      * Executes necessary commands before the deployment.
+      *
+      * @param DeploymentConfiguration $config The configuration to use
+      */
+     protected abstract function before(DeploymentConfiguration $config);
+
+    /**
      * Performs the deployment to a server. Returns a boolean after the deployment.
      *
-     * @param DeploymentConfiguration $config The deployment configuration object
+     * @param Request $request The contents of the request for deployment
+     * @param DeploymentConfiguration $config Deployment configuration object
+     * @param string $secret The secret to validate
      *
-     * @return boolean
+     * @return bool
      */
-	public abstract function deploy(DeploymentConfiguration $config);
+	public abstract function deploy(Request $request,
+          DeploymentConfiguration $config
+          $secret);
 
-	/**
+    /**
      * Checks the validity of the secret for the configuration object. Throws an
      * exception if the secret cannot be verified.
      *
@@ -70,7 +115,7 @@ abstract class DeploymentStrategy
      *
      * @throws InvalidDeploymentSecretException
      */
-	public abstract function checkDeploymentSecret(Request $request,
+	protected abstract function checkDeploymentSecret(Request $request,
 		DeploymentConfiguration $config,
         $secret);
 }

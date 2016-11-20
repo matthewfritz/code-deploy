@@ -7,8 +7,6 @@ use Deployments\Models\DeploymentConfiguration;
 
 class DeploymentStrategyGitHub extends DeploymentStrategy
 {
-	protected $commands;
-
 	/**
 	 * Constructs a new DeploymentStrategyGitHub object with the specified
 	 * array of deployment commands.
@@ -16,16 +14,21 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
 	 * @param array $commands Array of commands to execute
 	 */
 	public function __construct(array $commands) {
-		$this->commands = $commands;
+		parent::__construct($commands);
 	}
 
 	// documentation in implemented interface
-	public function deploy(DeploymentConfiguration $config) {
+	protected function after(DeploymentConfiguration $config) {
 		return true;
 	}
 
 	// documentation in implemented interface
-	public function checkDeploymentSecret(Request $request,
+	protected function before(DeploymentConfiguration $config) {
+		return true;
+	}
+
+	// documentation in implemented interface
+	protected function checkDeploymentSecret(Request $request,
 		DeploymentConfiguration $config,
         $secret) {
 		if(!empty($config->secret)) {
@@ -53,5 +56,26 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
                 );
             }
         }
+	}
+
+	// documentation in implemented interface
+	public function deploy(Request $request,
+		DeploymentConfiguration $config,
+		$secret) {
+		// check the deployment secret, if any
+		$this->checkDeploymentSecret($request, $config, $secret);
+
+		// execute the necesary configuration functionality before the deployment
+		$this->configure($config);
+
+		// execute the necessary pre-deployment commands
+		$this->before($config);
+
+		// TODO: execute the necessary deployment commands
+
+		// execute the necessary post-deployment commands
+		$this->after($config);
+
+		return true;
 	}
 }
