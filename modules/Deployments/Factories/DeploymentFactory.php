@@ -8,13 +8,13 @@ use Deployments\Strategies\DeploymentStrategyGitHub;
 
 class DeploymentFactory
 {
-	protected $types = [
+	protected static $types = [
 		'github' => DeploymentStrategyGitHub::class,
 	];
 
 	public static function fromType($type) {
-		if(in_array($type, $this->types)) {
-			return $types[$type];
+		if(in_array($type, self::$types)) {
+			return self::$types[$type];
 		}
 
 		throw new InvalidDeploymentTypeException(
