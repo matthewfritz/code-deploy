@@ -15,6 +15,7 @@ use Deployments\Models\DeploymentCommandTemplate;
 use Deployments\Models\DeploymentConfiguration;
 use Deployments\Models\DeploymentLog;
 use Deployments\Models\DeploymentType;
+use Deployments\Strategies\DeploymentStrategyGitHub;
 
 use PrivateKeys\Exceptions\invalidPrivateKeyException;
 use PrivateKeys\Models\PrivateKey;
