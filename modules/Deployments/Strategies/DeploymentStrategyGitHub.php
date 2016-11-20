@@ -5,6 +5,8 @@ namespace Deployments\Strategies;
 use Deployments\Interfaces\DeploymentStrategy;
 use Deployments\Models\DeploymentConfiguration;
 
+use SSH;
+
 class DeploymentStrategyGitHub extends DeploymentStrategy
 {
 	/**
@@ -71,7 +73,11 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
 		// execute the necessary pre-deployment commands
 		$this->before($config);
 
-		// TODO: execute the necessary deployment commands
+		// connect to the remote host and execute the commands
+        SSH::run($commands, function($line) {
+            $this->outputLines[] = trim($line);
+        });
+        $this->outputLines[] = "Done.";
 
 		// execute the necessary post-deployment commands
 		$this->after($config);

@@ -11,19 +11,18 @@ use Illuminate\Http\Request;
 use Deployments\Exceptions\InvalidDeploymentNameException;
 use Deployments\Exceptions\InvalidDeploymentSecretException;
 use Deployments\Exceptions\InvalidDeploymentTypeException;
+
+use Deployments\Factories\DeploymentFactory;
+
 use Deployments\Models\DeploymentCommandTemplate;
 use Deployments\Models\DeploymentConfiguration;
 use Deployments\Models\DeploymentLog;
-use Deployments\Models\DeploymentType;
+
 use Deployments\Strategies\DeploymentStrategyGitHub;
 
 use PrivateKeys\Exceptions\invalidPrivateKeyException;
-use PrivateKeys\Models\PrivateKey;
 
 use RemoteHosts\Exceptions\InvalidRemoteHostException;
-use RemoteHosts\Models\RemoteHost;
-
-use SSH;
 
 class DeploymentController extends Controller
 {
@@ -74,15 +73,10 @@ class DeploymentController extends Controller
                 }
             }
 
-            // configure the SSH connection for the deployment
-            $this->configureSSH($config);
-
-            // connect to the remote host and execute the commands
-            $outputLines = [];
-            SSH::run($commands, function($line) use (&$outputLines) {
-                $outputLines[] = trim($line);
-            });
-            $outputLines[] = "Done.";
+            // figure out the deployment strategy and execute it
+            $strategy = DeploymentFactory::fromType($config->deployment_type_name);
+            $strategy = new $strategy($commands);
+            $strategy->deploy($config);
 
             // generate some metadata about the deployment
             $message = "Deployment complete";
@@ -201,77 +195,5 @@ class DeploymentController extends Controller
 
         // all checks passed, so return the config objects
         return $config;
-    }
-
-    /**
-     * Checks the validity of the secret for the configuration set. Throws an
-     * exception if the secret cannot be verified.
-     *
-     * @param Request $request The contents of the request for deployment
-     * @param string $deploymentName The name of the deployment
-     * @param Collection:DeploymentConfiguration $config Set of deployment configuration
-     * @param string $secret The secret to validate
-     *
-     * @throws InvalidDeploymentSecretException
-     */
-    private function checkDeploymentSecret(Request $request,
-        $deploymentName,
-        $config,
-        $secret) {
-        // retrieve all configurations with a secret value
-        $configs = $config->filter(function($c) {
-            return !empty($c->secret);
-        });
-        if(!$configs->isEmpty()) {
-            // there are configurations with secrets so we need to perform validity
-            // checks. GitHub works differently with its secret values than a custom
-            // git server would so we need to take that into account.
-            $invalid = $configs->filter(function($c) use ($secret, $request) {
-                if($c->deployment_type_name == "github") {
-                    // retrieve the secret header and strip off the sha1= portion
-                    $secretParts = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE']);
-                    $hAlgorithm = $secretParts[0];
-                    $hValue = $secretParts[1];
-
-                    // if the HMAC digest of the request from GitHub is different than the
-                    // the calculated digest below, the secrets do not match
-                    $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret));
-                    return !hash_equals($calculated, $hValue);
-                }
-                else
-                {
-                    // custom Git server so it's a simple check for whether the
-                    // secret is invalid
-                    return trim($c->secret) != trim($secret);
-                }
-            });
-
-            // if there are any configurations still in the collection, let's throw
-            // the exeception
-            if(!$invalid->isEmpty()) {
-                throw new InvalidDeploymentSecretException(
-                    "Deployment '{$deploymentName}' has different secrets for the following remote hosts: " .
-                        $invalid->implode('remote_host_name', ', ')
-                );
-            }
-        }
-    }
-
-    /**
-     * Configures the SSH capabilities using a complete deployment configuration.
-     *
-     * @param DeploymentConfiguration $deploymentConfiguration The configuration to use
-     */
-    private function configureSSH($deploymentConfiguration) {
-        $host = $deploymentConfiguration->remoteHost->host;
-        $user = $deploymentConfiguration->user;
-        $key = $deploymentConfiguration->remoteHost->privateKey->path;
-
-        $dc = config('remote.default');
-        config([
-            "remote.connections.{$dc}.host" => $host,
-            "remote.connections.{$dc}.username" => $user,
-            "remote.connections.{$dc}.key" => $key
-        ]);
     }
 }

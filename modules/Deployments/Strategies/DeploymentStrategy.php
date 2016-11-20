@@ -93,6 +93,20 @@ abstract class DeploymentStrategy
      protected abstract function before(DeploymentConfiguration $config);
 
     /**
+     * Checks the validity of the secret for the configuration object. Throws an
+     * exception if the secret cannot be verified.
+     *
+     * @param Request $request The contents of the request for deployment
+     * @param DeploymentConfiguration $config Deployment configuration object
+     * @param string $secret The secret to validate
+     *
+     * @throws InvalidDeploymentSecretException
+     */
+     protected abstract function checkDeploymentSecret(Request $request,
+          DeploymentConfiguration $config,
+        $secret);
+
+    /**
      * Performs the deployment to a server. Returns a boolean after the deployment.
      *
      * @param Request $request The contents of the request for deployment
@@ -104,18 +118,4 @@ abstract class DeploymentStrategy
 	public abstract function deploy(Request $request,
           DeploymentConfiguration $config
           $secret);
-
-    /**
-     * Checks the validity of the secret for the configuration object. Throws an
-     * exception if the secret cannot be verified.
-     *
-     * @param Request $request The contents of the request for deployment
-     * @param DeploymentConfiguration $config Deployment configuration object
-     * @param string $secret The secret to validate
-     *
-     * @throws InvalidDeploymentSecretException
-     */
-	protected abstract function checkDeploymentSecret(Request $request,
-		DeploymentConfiguration $config,
-        $secret);
 }
