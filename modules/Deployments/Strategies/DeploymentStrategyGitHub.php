@@ -2,10 +2,10 @@
 
 namespace Deployments\Strategies;
 
-use Deployments\Interfaces\DeploymentStrategyInterface;
+use Deployments\Interfaces\DeploymentStrategy;
 use Deployments\Models\DeploymentConfiguration;
 
-class DeploymentStrategyGitHub implements DeploymentStrategyInterface
+class DeploymentStrategyGitHub extends DeploymentStrategy
 {
 	protected $commands;
 
