@@ -93,7 +93,7 @@ class DeploymentController extends Controller
                 'group' => $config->group,
                 'success' => $success,
                 'message' => $message,
-                'output' => implode("\n", $outputLines),
+                'output' => implode("\n", $strategy->getOutputLines()),
             ]);
             $data['results'][] = $log;
         }
