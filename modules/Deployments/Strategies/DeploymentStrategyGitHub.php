@@ -39,7 +39,7 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
             // there are configurations with secrets so we need to perform validity
             // checks. GitHub works differently with its secret values than a custom
             // git server would so we need to take that into account.
-            
+
             // retrieve the secret header and strip off the sha1= portion
             $secretParts = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE']);
             $hAlgorithm = $secretParts[0];
@@ -51,7 +51,7 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
 
             // if there are any configurations still in the collection, let's throw
             // the exeception
-            if(!hash_equals($calculated, $hValue);) {
+            if(!hash_equals($calculated, $hValue)) {
                 throw new InvalidDeploymentSecretException(
                     "Deployment '{$config->deployment_name}' has a different secret for the following remote host: " .
                         $config->remote_host_name
