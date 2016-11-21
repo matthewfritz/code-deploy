@@ -39,21 +39,19 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
             // there are configurations with secrets so we need to perform validity
             // checks. GitHub works differently with its secret values than a custom
             // git server would so we need to take that into account.
-            $invalid = $configs->filter(function($c) use ($secret, $request) {
-                // retrieve the secret header and strip off the sha1= portion
-                $secretParts = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE']);
-                $hAlgorithm = $secretParts[0];
-                $hValue = $secretParts[1];
+            
+            // retrieve the secret header and strip off the sha1= portion
+            $secretParts = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE']);
+            $hAlgorithm = $secretParts[0];
+            $hValue = $secretParts[1];
 
-                // if the HMAC digest of the request from GitHub is different than the
-                // the calculated digest below, the secrets do not match
-                $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret));
-                return !hash_equals($calculated, $hValue);
-            });
+            // if the HMAC digest of the request from GitHub is different than the
+            // the calculated digest below, the secrets do not match
+            $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret));
 
             // if there are any configurations still in the collection, let's throw
             // the exeception
-            if(!$invalid->isEmpty()) {
+            if(!hash_equals($calculated, $hValue);) {
                 throw new InvalidDeploymentSecretException(
                     "Deployment '{$config->deployment_name}' has a different secret for the following remote host: " .
                         $config->remote_host_name
