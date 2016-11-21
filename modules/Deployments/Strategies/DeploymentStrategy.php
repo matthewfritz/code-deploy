@@ -116,6 +116,6 @@ abstract class DeploymentStrategy
      * @return bool
      */
 	public abstract function deploy(Request $request,
-          DeploymentConfiguration $config
+          DeploymentConfiguration $config,
           $secret);
 }
