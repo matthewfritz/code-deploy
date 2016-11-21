@@ -1,6 +1,6 @@
 <?php
 
-namespace Deployment\Strategies;
+namespace Deployments\Strategies;
 
 use Deployments\Models\DeploymentConfiguration;
 
