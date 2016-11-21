@@ -74,7 +74,7 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
 		$this->before($config);
 
 		// connect to the remote host and execute the commands
-        SSH::run($commands, function($line) {
+        SSH::run($this->commands, function($line) {
             $this->outputLines[] = trim($line);
         });
         $this->outputLines[] = "Done.";
