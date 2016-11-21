@@ -5,6 +5,8 @@ namespace Deployments\Strategies;
 use Deployments\Strategies\DeploymentStrategy;
 use Deployments\Models\DeploymentConfiguration;
 
+use Illuminate\Http\Request;
+
 use SSH;
 
 class DeploymentStrategyGitHub extends DeploymentStrategy
