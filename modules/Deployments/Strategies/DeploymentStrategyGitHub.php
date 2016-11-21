@@ -47,7 +47,7 @@ class DeploymentStrategyGitHub extends DeploymentStrategy
 
             // if the HMAC digest of the request from GitHub is different than the
             // the calculated digest below, the secrets do not match
-            $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($c->secret));
+            $calculated = hash_hmac($hAlgorithm, $request->getContent(), trim($config->secret));
 
             // if there are any configurations still in the collection, let's throw
             // the exeception
