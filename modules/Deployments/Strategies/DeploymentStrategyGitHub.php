@@ -2,7 +2,7 @@
 
 namespace Deployments\Strategies;
 
-use Deployments\Interfaces\DeploymentStrategy;
+use Deployments\Strategies\DeploymentStrategy;
 use Deployments\Models\DeploymentConfiguration;
 
 use SSH;
