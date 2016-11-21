@@ -13,7 +13,7 @@ class DeploymentFactory
 	];
 
 	public static function fromType($type) {
-		if(in_array($type, self::$types)) {
+		if(array_key_exists($type, self::$types)) {
 			return self::$types[$type];
 		}
 
