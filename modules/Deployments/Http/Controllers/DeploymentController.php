@@ -76,7 +76,7 @@ class DeploymentController extends Controller
             // figure out the deployment strategy and execute it
             $strategy = DeploymentFactory::fromType($config->deployment_type_name);
             $strategy = new $strategy($commands);
-            $strategy->deploy($config);
+            $strategy->deploy($request, $config, $deploymentSecret);
 
             // generate some metadata about the deployment
             $message = "Deployment complete";
