@@ -150,14 +150,6 @@ class DeploymentController extends Controller
             );
         }
 
-        // check the secret value for validity
-        $this->checkDeploymentSecret(
-            $request,
-            $deploymentName,
-            $config,
-            $deploymentSecret
-        );
-
         // if there is an invalid remote host anywhere, throw an exception
         $invalid = $config->filter(function($conf) {
             return is_null($conf->remoteHost);
