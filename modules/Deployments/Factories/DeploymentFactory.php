@@ -2,7 +2,7 @@
 
 namespace Deployments\Factories;
 
-use Deployment\Exceptions\InvalidDeploymentTypeException;
+use Deployments\Exceptions\InvalidDeploymentTypeException;
 
 use Deployments\Strategies\DeploymentStrategyGitHub;
 
